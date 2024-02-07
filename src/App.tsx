@@ -13,6 +13,12 @@ export default function App() {
   };
 
   const addNumber = (num: string) => {
+    if (currFunction !== null) {
+      setCalculating(Number(display));
+      setDisplay(num);
+      return;
+    }
+
     if (display !== "Error") {
       if (display.length > 12) {
         setDisplay("Error");
@@ -42,6 +48,54 @@ export default function App() {
     setDisplay(display + ".");
   };
 
+  const evaluate = () => {
+    if (display === "Error") {
+      clearDisplay();
+      return;
+    }
+
+    let result;
+
+    switch (currFunction) {
+      case "+":
+        result = calculating + Number(display);
+        break;
+      case "-":
+        result = calculating - Number(display);
+        break;
+      case "×":
+        result = calculating * Number(display);
+        break;
+      case "÷":
+        if (display === "0") {
+          setDisplay("Error");
+          setCurrFunction(null);
+          setCalculating(0);
+          return;
+        } else {
+          result = calculating / Number(display);
+        }
+        break;
+      case "^":
+        result = Math.pow(calculating, Number(display));
+        break;
+      default:
+        return;
+    }
+
+    // Set a limit for the result
+    const resultLimit = 999999999999; // Adjust the limit as needed
+
+    if (Math.abs(result) > resultLimit) {
+      setDisplay("Error");
+    } else {
+      setDisplay(String(result));
+    }
+
+    setCurrFunction(null);
+    setCalculating(0);
+  };
+
   return (
     <>
       <div className="calculator">
@@ -60,7 +114,7 @@ export default function App() {
             <button className="function" onClick={() => setCurrFunction("^")}>
               ^
             </button>
-            <button className="function" id="divide">
+            <button className="function" onClick={() => setCurrFunction("÷")}>
               ÷
             </button>
           </div>
@@ -74,7 +128,7 @@ export default function App() {
             <button className="number" onClick={() => addNumber("9")}>
               9
             </button>
-            <button>×</button>
+            <button onClick={() => setCurrFunction("×")}>×</button>
           </div>
           <div className="row">
             <button className="number" onClick={() => addNumber("4")}>
@@ -86,7 +140,7 @@ export default function App() {
             <button className="number" onClick={() => addNumber("6")}>
               6
             </button>
-            <button>-</button>
+            <button onClick={() => setCurrFunction("-")}>-</button>
           </div>
           <div className="row">
             <button className="number" onClick={() => addNumber("1")}>
@@ -98,7 +152,7 @@ export default function App() {
             <button className="number" onClick={() => addNumber("3")}>
               3
             </button>
-            <button>+</button>
+            <button onClick={() => setCurrFunction("+")}>+</button>
           </div>
           <div className="row">
             <button onClick={addDecimal}>.</button>
@@ -106,7 +160,9 @@ export default function App() {
               0
             </button>
 
-            <button className="equals">=</button>
+            <button className="equals" onClick={evaluate}>
+              =
+            </button>
           </div>
         </div>
       </div>
