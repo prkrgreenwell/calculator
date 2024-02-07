@@ -5,6 +5,22 @@
   text-align: center;
 }
 
-div {
-  border: solid white 2px;
+button {
+  min-width: 62px;
+}
+
+.display-box {
+  display: flex;
+  justify-content: right;
+}
+
+.display {
+  display: flex;
+  justify-content: right;
+  margin-right: 1rem;
+  font-size: xx-large;
+}
+
+.equals {
+  min-width: 124px;
 }
